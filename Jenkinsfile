@@ -22,11 +22,11 @@ pipeline {
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
-                    sshPublisher(
+                    PublishOverSsh(
                         failOnError: true,
                         continueOnError: false,
                         publishers: [
-                            sshPublisherDes(
+                            sshPublisherDesc(
                                 configName: 'staging',
                                 sshCredentials: [
                                     username: "$USERNAME",
