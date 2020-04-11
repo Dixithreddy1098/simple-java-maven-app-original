@@ -13,8 +13,38 @@ pipeline {
             steps {
                 sh 'mvn test'
                 archiveArtifacts artifacts: 'target/*.jar'
+              
             } 
         }
-        
+        stage('DeployToStaging') {
+            when {
+                branch 'master'
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
+                    sshPublisher(
+                        failOnError: true,
+                        continueOnError: false,
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'staging',
+                                sshCredentials: [
+                                    username: "$USERNAME",
+                                    encryptedPassphrase: "$USERPASS"
+                                ], 
+                                transfers: [
+                                    sshTransfer(
+                                        sourceFiles: 'target/my-app-1.0-SNAPSHOT.jar',
+                                        removePrefix: 'target/',
+                                        remoteDirectory: '/tmp',
+                                        
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                }
+            }
+        }
     }
 }
