@@ -15,24 +15,6 @@ pipeline {
                 archiveArtifacts artifacts: 'target/*.jar'
             } 
         }
-        stage ('DEPLOYING_TO_STAGING) {
-            steps { 
-                publishOverSsh { 
-                    continueOnError = false
-                    failOnError = true
-                    server ('staging') {
-                        credentials('staging') { 
-                        label('staging')
-                        transferSet { 
-                            sourceFiles: 'target/my-app-1.0-SNAPSHOT.jar'
-                            removePrefix: 'target/'
-                            remoteDirectory: '/tmp'   
-                        } 
-                        } 
-                    } 
-                } 
-             }                                   
-        }
-
+        
     }
 }
