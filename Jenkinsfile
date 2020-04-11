@@ -22,8 +22,6 @@ pipeline {
                     failOnError = true
                     server ('staging') {
                         credentials('staging') { 
-                            username: 'cicd'
-                            password: 'Siddhu1098'
                         label('staging')
                         transferSet { 
                             sourceFiles: 'target/my-app-1.0-SNAPSHOT.jar'
